@@ -1,1 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-roboto: "Roboto", sans-serif;
+  --color-primary: #2b7fff;
+}
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html {
+    font-family: var(--font-roboto);
+  }
+
+  body {
+    @apply antialiased;
+  }
+}
