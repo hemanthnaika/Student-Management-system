@@ -6,8 +6,7 @@ export async function OPTIONS() {
   return new Response(null, {
     status: 200,
     headers: {
-      "Access-Control-Allow-Origin":
-        "https://student-management-system-hemanth-client.vercel.app",
+      "Access-Control-Allow-Origin": process.env.FRONTEND_URL!,
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
