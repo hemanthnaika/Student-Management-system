@@ -3,6 +3,7 @@ import { useAuthStore } from "../../store/authStore";
 import api from "@/lib/axios";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const setToken = useAuthStore((state) => state.setToken);
@@ -35,14 +36,13 @@ const Login = () => {
 
       setToken(token);
 
-      alert("Login successful");
-
+      toast.success("Login successful");
       navigate("/");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data?.message || "Login failed");
+        toast.error(error.response?.data?.message || "Login failed");
       } else {
-        alert("Login failed");
+        toast.error("An unexpected error occurred");
       }
     } finally {
       setLoading(false);
