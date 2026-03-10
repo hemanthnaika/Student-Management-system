@@ -1,7 +1,16 @@
 import { db } from "@/db";
 import { studentsTable } from "@/db/schema";
 import { NextResponse } from "next/server";
-
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "http://localhost:5173",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  });
+}
 export async function GET() {
   try {
     const students = await db.select().from(studentsTable);

@@ -5,9 +5,11 @@ import { NextResponse } from "next/server";
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
+    const { id } = await context.params;
+
     const body = await req.json();
     const { name, email, age, gender } = body;
 
@@ -19,7 +21,7 @@ export async function PUT(
         age,
         gender,
       })
-      .where(eq(studentsTable.id, Number(params.id)))
+      .where(eq(studentsTable.id, Number(id)))
       .returning();
 
     return NextResponse.json({
@@ -37,12 +39,18 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
-    await db
-      .delete(studentsTable)
-      .where(eq(studentsTable.id, Number(params.id)));
+    const { id } = await context.params;
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: "Student ID is required" },
+        { status: 400 },
+      );
+    }
+
+    await db.delete(studentsTable).where(eq(studentsTable.id, Number(id)));
 
     return NextResponse.json({
       success: true,

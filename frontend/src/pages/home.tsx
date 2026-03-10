@@ -7,8 +7,10 @@ import {
   Plus,
   Trash,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { useQuery } from "@tanstack/react-query";
+import { dashboardStats } from "@/services/student.services";
+import { Link } from "react-router";
 
 /* ---------------- CARD ---------------- */
 
@@ -37,12 +39,7 @@ const Card = ({
   );
 };
 
-/* ---------------- PIE DATA ---------------- */
-
-const genderData = [
-  { name: "Male", value: 70 },
-  { name: "Female", value: 50 },
-];
+/* ---------------- COLORS ---------------- */
 
 const COLORS = ["#2563eb", "#ec4899"];
 
@@ -59,6 +56,23 @@ const getGreeting = () => {
 /* ---------------- HOME ---------------- */
 
 const Home = () => {
+  const fetchDashboard = useQuery({
+    queryKey: ["dashboard"],
+    queryFn: dashboardStats,
+  });
+
+  const totalStudents =
+    fetchDashboard.data?.data?.totalStudents?.toString() ?? "0";
+
+  const male = fetchDashboard.data?.data?.genderRatio?.male ?? 0;
+  const female = fetchDashboard.data?.data?.genderRatio?.female ?? 0;
+
+  /* convert API gender object -> chart array */
+  const genderData = [
+    { name: "Male", value: male },
+    { name: "Female", value: female },
+  ];
+
   return (
     <div className="space-y-8 w-full p-6">
       {/* Header */}
@@ -71,8 +85,11 @@ const Home = () => {
 
       {/* Stats Cards */}
       <div className="grid md:grid-cols-3 gap-6">
-        <Card title="Total Students" value="120" icon={Users} />
+        <Card title="Total Students" value={totalStudents} icon={Users} />
+
+        {/* keeping your static values unchanged */}
         <Card title="Total Courses" value="30" icon={Book} />
+
         <Card title="Graduated" value="30" icon={GraduationCap} />
       </div>
 
@@ -82,7 +99,7 @@ const Home = () => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h2 className="font-semibold text-lg mb-4">Student Gender Ratio</h2>
 
-          <div className="h-[250px]">
+          <div className="h-62.5">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -109,20 +126,29 @@ const Home = () => {
           <h2 className="font-semibold text-lg mb-4">Quick Actions</h2>
 
           <div className="grid md:grid-cols-1 gap-4">
-            <Button className="bg-blue-600 p-6 text-white font-semibold text-md rounded-lg hover:bg-blue-700 flex items-center gap-2 justify-start">
+            <Link
+              to={"/students"}
+              className="bg-blue-600 p-6 text-white font-semibold text-md rounded-lg hover:bg-blue-700 flex items-center gap-2 justify-start"
+            >
               <Eye className="w-5 h-5" />
               View Student
-            </Button>
+            </Link>
 
-            <Button className="bg-green-600 p-6 text-white font-semibold text-md rounded-lg hover:bg-green-700 flex items-center gap-2 justify-start">
+            <Link
+              to={"/students"}
+              className="bg-green-600 p-6 text-white font-semibold text-md rounded-lg hover:bg-green-700 flex items-center gap-2 justify-start"
+            >
               <Plus className="w-5 h-5" />
               Add Student
-            </Button>
+            </Link>
 
-            <Button className="bg-red-500 p-6 text-white font-semibold text-md rounded-lg hover:bg-red-600 flex items-center gap-2 justify-start">
+            <Link
+              to={"/students"}
+              className="bg-red-500 p-6 text-white font-semibold text-md rounded-lg hover:bg-red-600 flex items-center gap-2 justify-start"
+            >
               <Trash className="w-5 h-5" />
               Delete Student
-            </Button>
+            </Link>
           </div>
         </div>
       </div>
