@@ -16,7 +16,8 @@ import {
   UserRound,
   type LucideIcon,
 } from "lucide-react";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
+import { useAuthStore } from "store/authStore";
 
 const MenuList = ({
   title,
@@ -42,6 +43,14 @@ const MenuList = ({
 };
 
 function AppSidebar() {
+  const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <Sidebar className="bg-white border-r border-gray-200 shadow-sm">
       {/* Header */}
@@ -67,7 +76,10 @@ function AppSidebar() {
 
       {/* Footer */}
       <SidebarFooter className="border-t border-gray-100 p-4">
-        <Button className="w-full bg-red-600 hover:bg-red-700 text-white font-medium flex items-center justify-center gap-2 py-5 rounded-lg transition shadow-sm">
+        <Button
+          onClick={handleLogout}
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-medium flex items-center justify-center gap-2 py-5 rounded-lg transition shadow-sm"
+        >
           <span>Logout</span>
           <LogOut className="w-4 h-4" />
         </Button>
@@ -89,6 +101,7 @@ export default function Layout() {
           <div className="h-14 flex items-center justify-between px-6 border-b shadow-sm">
             <SidebarTrigger />
           </div>
+
           {/* Page Content */}
           <main className="flex-1 w-full p-6 overflow-y-auto">
             <div className="w-full max-w-none">
