@@ -17,7 +17,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Link, Outlet, useNavigate } from "react-router";
-import { useAuthStore } from "store/authStore";
+import { useAuthStore } from './../../store/authStore';
 
 const MenuList = ({
   title,
