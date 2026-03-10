@@ -110,7 +110,7 @@ const Home = () => {
                   dataKey="value"
                   label
                 >
-                  {genderData.map((entry, index) => (
+                  {genderData.map((_, index) => (
                     <Cell key={index} fill={COLORS[index]} />
                   ))}
                 </Pie>
